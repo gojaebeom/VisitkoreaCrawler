@@ -15,7 +15,7 @@
 ````````````````` URL ````````````````
 https://korean.visitkorea.or.kr/call?
 cmd=TOUR_CONTENT_LIST_VIEW
-&month=All&areaCode=1
+&month=All&areaCode=2
 &locationx=0&locationy=0
 &page=1&cnt=200
 &stampId=1589345b-b030-11ea-b8bd-020027310001
@@ -102,7 +102,6 @@ class VisitkoreaParser
         let i = 0;
         for(json of jsonList)
         {
-            await this.getDetailContent(json.cotId);
             productIdTbody.innerHTML += 
             `
             <tr style="height:30px;text-align:center;padding:8px;border-bottom:1px solid gray;">
@@ -125,7 +124,7 @@ class VisitkoreaParser
     /* 연결된 서버가 있다면 해당 서버에 데이터 보내기 🎨 */
     sendMyServer(jsonList)
     {
-        let URL = `[데이터를 전송할 서버 URL]`;
+        let URL = `http://18.179.58.9:8000/visitkorea/store`;
 
         let form = document.createElement("form");
         form.setAttribute("charset", "UTF-8");
