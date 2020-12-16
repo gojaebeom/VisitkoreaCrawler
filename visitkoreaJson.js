@@ -47,6 +47,20 @@ class VisitkoreaParser
         return json.body.result;
     }
 
+    /* 로직 미구현 */
+    async getDetailContent(cotId)
+    {
+        let iframe = document.createElement("iframe");
+        iframe.src = `https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=${cotId}`;
+        iframe.setAttribute(`id`, `iframe`);
+        document.getElementById("detailIframeWrap").appendChild(iframe);
+
+        document.getElementById(`iframe`).onload = () => 
+        {
+
+        };
+    }
+
     /* DOM 그리기 🎨 */
     domRedraw()
     {
@@ -78,8 +92,7 @@ class VisitkoreaParser
                 <tbody id="productIdTbody" style="max-height:300px;overflow:hidden;"></tbody>
             </table>
         </form>
-        <div id="bestPageWrap" style="display:none;"></div>
-        <div id="reviewPageWrap" style="display:none;"></div>
+        <div id="detailIfameWrap" style=""></div>
         `;
     }
 
@@ -89,6 +102,7 @@ class VisitkoreaParser
         let i = 0;
         for(json of jsonList)
         {
+            await this.getDetailContent(json.cotId);
             productIdTbody.innerHTML += 
             `
             <tr style="height:30px;text-align:center;padding:8px;border-bottom:1px solid gray;">
@@ -109,13 +123,24 @@ class VisitkoreaParser
     }
 
     /* 연결된 서버가 있다면 해당 서버에 데이터 보내기 🎨 */
-    async sendMyServer(jsonList)
+    sendMyServer(jsonList)
     {
-        for(json of jsonList){
-            console.log(json.title);
-            let YOUR_URL = ``;
-            await window.open(YOUR_URL);
-        }
+        let URL = `[데이터를 전송할 서버 URL]`;
+
+        let form = document.createElement("form");
+        form.setAttribute("charset", "UTF-8");
+        form.setAttribute("method", "Post");  //Post 방식
+        form.setAttribute("action", URL); //요청 보낼 주소
+
+        let jsonInput = document.createElement("input");
+        jsonInput.setAttribute("name", "json_list");
+        jsonInput.setAttribute("value", JSON.stringify(jsonList));
+        
+        form.appendChild(jsonInput);
+        document.body.appendChild(form)
+        window.open('',`popForm`);
+        form.target=`popForm`;
+        form.submit();
     }
 }
 
@@ -124,7 +149,7 @@ const jsonList = vp.getJsonList();
                  vp.domRedraw();
                  vp.viewJsonList(jsonList);
 
-document.querySelector(`#bestButton`).onclick = async () => {
-    console.log('버튼 클릭됨');
-    //await vp.sendMyServer(jsonList);
+document.querySelector(`#bestButton`).onclick = () => {
+    console.log('데이터 전송!')
+    vp.sendMyServer(jsonList);
 }
