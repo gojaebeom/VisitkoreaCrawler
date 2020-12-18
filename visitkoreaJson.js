@@ -107,8 +107,7 @@ const getDetailContent = async function(cotId, count)
     
         document.getElementById(`iframe-${cotId}`).onload = async () => 
         {
-            console.log(`1초 슬립`);
-            await sleep(200);
+            await sleep(500);
             
             let detailText;
             let detailUrl;
@@ -169,6 +168,7 @@ const viewJsonList = async function(jsonList)
     let allList = [];
     for(json of jsonList)
     {
+        console.log(`%c ${count} 번`,'color:tomato');
         await sleep(500);
         ++count;
         let _detailText;
